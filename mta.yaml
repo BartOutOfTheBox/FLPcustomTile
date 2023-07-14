@@ -1,75 +1,124 @@
-_schema-version: '3.1'
+_schema-version: "3.1"
 ID: bookshop
+description: A simple CAP project.
 version: 1.0.0
-description: "A simple CAP project."
+modules:
+- name: bookshop-srv
+  type: nodejs
+  path: .
+  requires:
+  - name: bookshop-db
+  - name: bookshop-auth
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: npm
+    ignore:
+    - /db/*.env*
+    - ./db/node_modules
+    - /node_modules
+    - /mta_archives
+    - /resources
+    - /approuter
+    - /.vscode
+    - /.github
+    - /.git
+    - ./app
+    - '*.cdsrc-private.json*'
+- name: bookshop-db-deployer
+  type: hdb
+  path: db
+  requires:
+  - name: bookshop-db
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    ignore:
+    - '*node_modules*'
+    - .env
+    - .cdsrc-private.json
+- name: bookshop-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: bookshop-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - comdanonebookshopviewbooks.zip
+      name: comdanonebookshopviewbooks
+      target-path: resources/
+- name: comdanonebookshopviewbooks
+  type: html5
+  path: app/bookshopviewbooks
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: bookshop-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    config:
+      schema: BOOKSHOP
+    service: hana
+    service-keys:
+    - name: bookshop-db-key
+    service-name: bookshop-db
+    service-plan: hdi-shared
+- name: bookshop-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: bookshop
+    path: ./xs-security.json
+    service: xsuaa
+    service-keys:
+    - name: bookshop-auth-key
+    service-name: bookshop-auth
+    service-plan: application
+- name: bookshop-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: bookshop-html5-srv
+    service-keys:
+    - name: bookshop-html5-srv-key
+    service-plan: app-host
+- name: bookshop-destination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: bookshop-destination
+    service-plan: lite
 parameters:
+  deploy_mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:
-    - builder: custom
-      commands:
-        - npx cds build --production
-modules:
-  - name: bookshop-srv
-    type: nodejs
-    path: .
-    parameters:
-      buildpack: nodejs_buildpack
-    build-parameters:
-      builder: npm
-      ignore:
-        - /db/*.env*
-        - ./db/node_modules
-        - /node_modules
-        - /mta_archives
-        - /resources
-        - /approuter
-        - /.vscode
-        - /.github
-        - /.git
-        - ./app
-        - '*.cdsrc-private.json*'
-    provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
-        properties:
-          srv-url: ${default-url}
-    requires:
-      - name: bookshop-db
-      - name: bookshop-auth
-
-  - name: bookshop-db-deployer
-    type: hdb
-    path: db
-    parameters:
-      buildpack: nodejs_buildpack
-    build-parameters:
-      ignore:
-        - '*node_modules*'
-        - .env
-        - .cdsrc-private.json
-    requires:
-      - name: bookshop-db
-
-resources:
-  - name: bookshop-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      config:
-        schema: BOOKSHOP
-      service: hana
-      service-plan: hdi-shared
-      service-name: bookshop-db
-      service-keys:
-        - name: bookshop-db-key
-  - name: bookshop-auth
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: xsuaa
-      service-plan: application
-      service-name: bookshop-auth
-      service-keys:
-        - name: bookshop-auth-key
-      path: ./xs-security.json
-      config:
-        xsappname: bookshop
-        tenant-mode: dedicated
+  - builder: custom
+    commands:
+    - npx cds build --production

@@ -1,78 +1,84 @@
 {
-  "name": "bookshop",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap/cds": "^7",
-    "express": "^4",
-    "@sap/cds-hana": "^2",
-    "@sap/xssec": "^3",
-    "passport": "^0"
-  },
-  "devDependencies": {
-    "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^7"
-  },
-  "engines": {
-    "node": "^16.0.0 || ^18.16.1"
-  },
-  "scripts": {
-    "start": "cds-serve",
-    "approuter": "cds bind --exec npm run start-approuter",
-    "start-approuter": "npm start -prefix approuter"
-  },
-  "cds": {
-    "[development]": {
-      "requires": {
-        "db": {
-          "impl": "@cap-js/sqlite",
-          "credentials": {
-            "url": ":memory:"
-          },
-          "kind": "sqlite"
-        },
-        "auth": {
-          "kind": "dummy"
-        }
-      },
-      "features": {
-        "in_memory_db": true
-      }
+    "name": "bookshop",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/cds": "^7",
+        "@sap/cds-hana": "^2",
+        "@sap/xssec": "^3",
+        "express": "^4",
+        "passport": "^0"
     },
-    "[hybrid]": {
-      "build": {
-        "target": "."
-      },
-      "hana": {
-        "deploy-format": "hdbtable"
-      },
-      "requires": {
-        "db": {
-          "kind": "hana"
-        },
-        "auth": {
-          "kind": "xsuaa"
-        }
-      }
+    "devDependencies": {
+        "@cap-js/sqlite": "^1",
+        "@sap/cds-dk": "^7",
+        "@sap/ux-specification": "^1.108.9",
+        "rimraf": "^3.0.2"
     },
-    "[production]": {
-      "build": {
-        "target": "."
-      },
-      "hana": {
-        "deploy-format": "hdbtable"
-      },
-      "requires": {
-        "db": {
-          "kind": "hana"
+    "engines": {
+        "node": "^16.0.0 || ^18.16.1"
+    },
+    "scripts": {
+        "start": "cds-serve",
+        "approuter": "cds bind --exec npm run start-approuter",
+        "start-approuter": "npm start -prefix approuter",
+        "watch-bookshopviewbooks": "cds watch --open bookshopviewbooks/webapp/index.html?sap-ui-xx-viewCache=false",
+        "undeploy": "cf undeploy bookshop --delete-services --delete-service-keys --delete-service-brokers",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    },
+    "cds": {
+        "[development]": {
+            "requires": {
+                "db": {
+                    "impl": "@cap-js/sqlite",
+                    "credentials": {
+                        "url": ":memory:"
+                    },
+                    "kind": "sqlite"
+                },
+                "auth": {
+                    "kind": "dummy"
+                }
+            },
+            "features": {
+                "in_memory_db": true
+            }
         },
-        "auth": {
-          "kind": "xsuaa"
+        "[hybrid]": {
+            "build": {
+                "target": "."
+            },
+            "hana": {
+                "deploy-format": "hdbtable"
+            },
+            "requires": {
+                "db": {
+                    "kind": "hana"
+                },
+                "auth": {
+                    "kind": "xsuaa"
+                }
+            }
+        },
+        "[production]": {
+            "build": {
+                "target": "."
+            },
+            "hana": {
+                "deploy-format": "hdbtable"
+            },
+            "requires": {
+                "db": {
+                    "kind": "hana"
+                },
+                "auth": {
+                    "kind": "xsuaa"
+                }
+            }
         }
-      }
     }
-  }
 }
