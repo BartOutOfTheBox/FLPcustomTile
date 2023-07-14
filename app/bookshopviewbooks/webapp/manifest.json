@@ -81,7 +81,10 @@
             "i18n": {
                 "type": "sap.ui.model.resource.ResourceModel",
                 "settings": {
-                    "bundleName": "com.danone.bookshopviewbooks.i18n.i18n"
+                    "bundleName": "com.danone.bookshopviewbooks.i18n.i18n",
+                    "async": true,
+                    "supportedLocales": [""],
+                    "fallbackLocale": ""
                 }
             },
             "": {
