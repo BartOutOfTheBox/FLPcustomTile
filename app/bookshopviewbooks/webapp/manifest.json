@@ -111,5 +111,9 @@
             "async": true,
             "id": "Main"
         }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "com.danone.bookshop"
     }
 }

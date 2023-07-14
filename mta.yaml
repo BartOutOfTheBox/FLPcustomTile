@@ -9,6 +9,7 @@ modules:
   requires:
   - name: bookshop-db
   - name: bookshop-auth
+  - name: bookshop-destination
   provides:
   - name: srv-api
     properties:
@@ -41,6 +42,36 @@ modules:
     - '*node_modules*'
     - .env
     - .cdsrc-private.json
+- name: bookshop-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: bookshop-destination
+    parameters:
+      content-target: true
+  - name: bookshop-repo-host
+    parameters:
+      service-key:
+        name: bookshop-html5-srv-key
+  - name: bookshop-auth
+    parameters:
+      service-key:
+        name: bookshop-auth-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: bookshop_router_html_repo_host
+          ServiceInstanceName: bookshop-html5-srv
+          ServiceKeyName: bookshop-html5-srv-key
+          sap.cloud.service: com.danone.bookshop
+        - Authentication: OAuth2UserTokenExchange
+          Name: bookshop_router_uaa
+          ServiceInstanceName: bookshop-auth
+          ServiceKeyName: bookshop-auth-key
+          sap.cloud.service: com.danone.bookshop
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
 - name: bookshop-app-content
   type: com.sap.application.content
   path: .
@@ -100,7 +131,7 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     config:
-      HTML5Runtime_enabled: false
+      HTML5Runtime_enabled: true
       init_data:
         instance:
           destinations:
@@ -109,11 +140,20 @@ resources:
             ProxyType: Internet
             Type: HTTP
             URL: https://ui5.sap.com
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: bookshop-srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
           existing_destinations_policy: update
       version: 1.0.0
     service: destination
     service-name: bookshop-destination
     service-plan: lite
+  requires:
+  - name: srv-api
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
