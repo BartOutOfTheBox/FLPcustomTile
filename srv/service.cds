@@ -1,5 +1,6 @@
 using com.danone.bookshop as bookshop from '../db/schema';
 
+@(requires: 'authenticated-user')
 service CatalogService {
   entity Books @readonly as projection on bookshop.Books;
   entity Authors @readonly as projection on bookshop.Authors;
