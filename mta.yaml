@@ -86,9 +86,23 @@ modules:
       - comdanonebookshopviewbooks.zip
       name: comdanonebookshopviewbooks
       target-path: resources/
+    - artifacts:
+      - comdanonebookshopviewauthors.zip
+      name: comdanonebookshopviewauthors
+      target-path: resources/
 - name: comdanonebookshopviewbooks
   type: html5
   path: app/bookshopviewbooks
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comdanonebookshopviewauthors
+  type: html5
+  path: app/bookshopviewauthors
   build-parameters:
     build-result: dist
     builder: custom
@@ -123,9 +137,9 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     service: html5-apps-repo
-    service-name: bookshop-html5-srv
     service-keys:
     - name: bookshop-html5-srv-key
+    service-name: bookshop-html5-srv
     service-plan: app-host
 - name: bookshop-destination
   type: org.cloudfoundry.managed-service
