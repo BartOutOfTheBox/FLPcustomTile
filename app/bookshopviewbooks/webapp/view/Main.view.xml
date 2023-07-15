@@ -1,7 +1,7 @@
 <mvc:View controllerName="com.danone.bookshopviewbooks.controller.Main" height="100%"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}" titleAlignment="Center">
+    <Page id="page" showHeader="false" title="{i18n>title}" titleAlignment="Center">
         <IllustratedMessage id="message" enableVerticalResponsiveness="true"
 			title="{i18n>sorry}"
 			description="{i18n>tooLazy}"
