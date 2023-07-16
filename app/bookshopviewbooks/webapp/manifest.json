@@ -37,7 +37,12 @@
                     "action": "Display",
                     "title": "{{flpTitle}}",
                     "subTitle": "{{flpSubtitle}}",
-                    "icon": "sap-icon://course-book"
+                    "icon": "sap-icon://course-book",
+                    "indicatorDataSource": {
+                        "dataSource": "mainService",
+                        "path": "Books/$count",
+                        "refresh": 1000
+                    }
                 }
             }
         }
