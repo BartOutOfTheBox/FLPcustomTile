@@ -1,7 +1,17 @@
 <mvc:View controllerName="com.danone.bookshopvieworderstile.controller.App"
     xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:microchart="sap.suite.ui.microchart"
     xmlns="sap.m">
-    <App id="app">
-    </App>
+    <GenericTile id="tile" header="{i18n>flpTitle}" subheader="{i18n>flpSubtitle}" press="onPress">
+        <TileContent id="tileContent" frameType="OneByOne">
+            <microchart:ComparisonMicroChart id="chart" scale="M" view="Wide" size="Responsive">
+                <microchart:data>
+                    <microchart:ComparisonMicroChartData id="chartAmericas" title="Americas" value="10" color="Critical"/>
+                    <microchart:ComparisonMicroChartData id="chartEMEA" title="EMEA" value="50" color="Good"/>
+                    <microchart:ComparisonMicroChartData id="chartAPAC" title="APAC" value="5" color="Error"/>
+                </microchart:data>
+            </microchart:ComparisonMicroChart>
+        </TileContent>
+    </GenericTile>
 </mvc:View>

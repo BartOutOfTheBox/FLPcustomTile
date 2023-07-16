@@ -97,5 +97,8 @@
     "sap.cloud": {
         "public": true,
         "service": "com.danone.bookshop"
+    },
+    "sap.flp": {
+        "type": "tile"
     }
 }
