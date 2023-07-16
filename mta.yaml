@@ -94,6 +94,10 @@ modules:
       - comdanonebookshopvieworders.zip
       name: comdanonebookshopvieworders
       target-path: resources/
+    - artifacts:
+      - comdanonebookshopvieworderstile.zip
+      name: comdanonebookshopvieworderstile
+      target-path: resources/
 - name: comdanonebookshopviewbooks
   type: html5
   path: app/bookshopviewbooks
@@ -117,6 +121,16 @@ modules:
 - name: comdanonebookshopvieworders
   type: html5
   path: app/bookshopvieworders
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: comdanonebookshopvieworderstile
+  type: html5
+  path: app/bookshopvieworderstile
   build-parameters:
     build-result: dist
     builder: custom

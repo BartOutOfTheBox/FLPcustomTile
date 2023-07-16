@@ -30,7 +30,8 @@
         "build": "rimraf resources mta_archives && mbt build --mtar archive",
         "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
         "watch-bookshopviewauthors": "cds watch --open bookshopviewauthors/webapp/index.html?sap-ui-xx-viewCache=false",
-        "watch-bookshopvieworders": "cds watch --open bookshopvieworders/webapp/index.html?sap-ui-xx-viewCache=false"
+        "watch-bookshopvieworders": "cds watch --open bookshopvieworders/webapp/index.html?sap-ui-xx-viewCache=false",
+        "watch-bookshopvieworderstile": "cds watch --open bookshopvieworderstile/webapp/index.html?sap-ui-xx-viewCache=false"
     },
     "cds": {
         "[development]": {
