@@ -87,35 +87,6 @@
                 }
             ]
         },
-        "routing": {
-            "config": {
-                "routerClass": "sap.m.routing.Router",
-                "viewType": "XML",
-                "async": true,
-                "viewPath": "com.danone.bookshopvieworderstile.view",
-                "controlAggregation": "pages",
-                "controlId": "app",
-                "clearControlAggregation": false
-            },
-            "routes": [
-                {
-                    "name": "RouteMain",
-                    "pattern": ":?query:",
-                    "target": [
-                        "TargetMain"
-                    ]
-                }
-            ],
-            "targets": {
-                "TargetMain": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": false,
-                    "viewId": "Main",
-                    "viewName": "Main"
-                }
-            }
-        },
         "rootView": {
             "viewName": "com.danone.bookshopvieworderstile.view.App",
             "type": "XML",
